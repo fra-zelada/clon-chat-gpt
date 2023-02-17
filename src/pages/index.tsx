@@ -1,6 +1,9 @@
-import { PlusIcon } from '@/components/Icons'
+import { Avatar } from '@/components/Avatar'
+import { ChatGPTLogo, PlusIcon, SendIcon } from '@/components/Icons'
+import { TypingEffect } from '@/components/TypingEffect'
 import Head from 'next/head'
-import { FC, PropsWithChildren } from 'react'
+import { FC, FormEvent, PropsWithChildren, useRef, KeyboardEvent } from 'react'
+import { useMessageStore } from '../store/messages'
 
 const Layout: FC<PropsWithChildren> = ({ children }) => {
   return (
@@ -29,12 +32,110 @@ const Aside = () => {
   )
 }
 
-const Chat = () => {
+interface MessageProps {
+  ia: boolean
+  message: string
+}
+
+const UserAvatar = () => {
   return (
-    <div>
+    <picture>
+      <img src={`${process.env.NEXT_PUBLIC_PROFILE_PIC}`} alt='mi imagen' />
+    </picture>
+  )
+}
+
+const Message: FC<MessageProps> = ({ ia, message }) => {
+  const avatar = ia ? <ChatGPTLogo /> : <UserAvatar />
+
+  const textElement = ia ? <TypingEffect text={message} /> : message
+
+  return (
+    <div
+      className={` text-gray-100 ${ia ? 'bg-gptlightgray' : 'bg-gptgray'}  ' `}
+    >
+      <article className=' flex gap-4 p-4 m-auto max-w-3xl'>
+        <Avatar>{avatar}</Avatar>
+        <div className='min-h-[20px] flex flex-1 flex-col items-start gap-4 whitespace-pre-wrap'>
+          <div className='prose-invert w-full break-words'>
+            <p>{textElement}</p>
+          </div>
+        </div>
+      </article>
+    </div>
+  )
+}
+
+export const ChatForm = () => {
+  const sendPrompt = useMessageStore((state) => state.sendPrompt)
+
+  const textAreaRef = useRef<HTMLTextAreaElement>(null)
+
+  const handleSubmit = (
+    event: FormEvent<HTMLFormElement> | KeyboardEvent<HTMLTextAreaElement>
+  ) => {
+    event.preventDefault()
+    const value = textAreaRef.current!.value.trim()
+    if (!value) return
+    sendPrompt(value)
+    textAreaRef.current!.value = ''
+  }
+
+  const handleChange = () => {
+    const el = textAreaRef.current
+    const scrollHeight = el?.scrollHeight
+    el!.style.height = scrollHeight + 'px'
+  }
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      handleSubmit(e)
+    }
+  }
+
+  return (
+    <section className='absolute bottom-0 w-full left-0  right-0 ml-32'>
+      <form
+        onSubmit={handleSubmit}
+        className='flex flex-row max-w-3xl pt-6 m-auto mb-6 '
+      >
+        <div className='relative flex flex-col flex-grow w-full px-4 py-3 text-white border rounded-md shadow-lg bg-gptlightgray border-gray-900/50'>
+          <textarea
+            onChange={handleChange}
+            onKeyDown={(event) => {
+              handleKeyDown(event)
+            }}
+            ref={textAreaRef}
+            rows={1}
+            tabIndex={0}
+            autoFocus
+            defaultValue=''
+            className='w-full h-[24px] resize-none bg-transparent m-0 border-0 outline-none'
+          />
+          <button
+            className='absolute p-1 rounded-md
+          bottom-2.5 right-2.5'
+          >
+            <SendIcon />
+          </button>
+        </div>
+      </form>
+    </section>
+  )
+}
+
+const Chat = () => {
+  const messages = useMessageStore((state) => state.messages)
+
+  return (
+    <div className='flex flex-col h-full flex-1 pl-64'>
       <main>
-        <h1>Chat</h1>
+        {messages.map(({ id, ia, message }) => (
+          <Message key={id} ia={ia} message={message} />
+        ))}
       </main>
+      <ChatForm />
     </div>
   )
 }
@@ -46,3 +147,5 @@ export default function Home() {
     </Layout>
   )
 }
+
+// create a js iterator
