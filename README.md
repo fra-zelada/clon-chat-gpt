@@ -43,4 +43,10 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 https://www.twitch.tv/videos/1738061046
 https://github.com/midudev/midu-chatgpt-clone
 
+## VARIABLES DE ENTORNO
+
+|NAME|DESCRIPTION|
+|:----|:----|
+|CHAT_API_KEY|CHAT API KEY FROM OPENAI|
+|NEXT_PUBLIC_PROFILE_PIC|USER URL PROFILE PIC|
 
