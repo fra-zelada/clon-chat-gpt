@@ -9,7 +9,7 @@ const Layout: FC<PropsWithChildren> = ({ children }) => {
   return (
     <>
       <Head>
-        <title>midu Chat GPT</title>
+        <title>Clon Chat GPT</title>
       </Head>
       <div className='w-full relative bg-gptgray h-screen'>
         <Aside />
