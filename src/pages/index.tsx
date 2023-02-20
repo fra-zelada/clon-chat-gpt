@@ -2,7 +2,14 @@ import { Avatar } from '@/components/Avatar'
 import { ChatGPTLogo, PlusIcon, SendIcon } from '@/components/Icons'
 import { TypingEffect } from '@/components/TypingEffect'
 import Head from 'next/head'
-import { FC, FormEvent, PropsWithChildren, useRef, KeyboardEvent } from 'react'
+import {
+  FC,
+  FormEvent,
+  PropsWithChildren,
+  useRef,
+  KeyboardEvent,
+  useEffect
+} from 'react'
 import { useMessageStore } from '../store/messages'
 
 const Layout: FC<PropsWithChildren> = ({ children }) => {
@@ -21,7 +28,7 @@ const Layout: FC<PropsWithChildren> = ({ children }) => {
 
 const Aside = () => {
   return (
-    <aside className='bg-gptdarkgray fixed flex w-64 h-screen flex-col'>
+    <aside className='bg-gptdarkgray fixed flex w-64 h-screen flex-col z-10'>
       <nav className='flex flex-col flex-1 h-full p-2 space-y-1'>
         <button className='flex py-3 px-3 items-center gap-3 rounded-md hover:bg-gray-500/10 transition-colors duration-200 text-white cursor-pointer text-sm mb-2 flex-shrink-0 border border-white/20'>
           <PlusIcon />
@@ -83,6 +90,7 @@ export const ChatForm = () => {
 
   const handleChange = () => {
     const el = textAreaRef.current
+    el!.style.height = '0px'
     const scrollHeight = el?.scrollHeight
     el!.style.height = scrollHeight + 'px'
   }
@@ -95,7 +103,7 @@ export const ChatForm = () => {
   }
 
   return (
-    <section className='absolute bottom-0 w-full left-0  right-0 ml-32'>
+    <section className=' mt-auto w-full bg-gptgray'>
       <form
         onSubmit={handleSubmit}
         className='flex flex-row max-w-3xl pt-6 m-auto mb-6 '
@@ -127,6 +135,13 @@ export const ChatForm = () => {
 
 const Chat = () => {
   const messages = useMessageStore((state) => state.messages)
+  const dummy = useRef<HTMLHeadingElement>(null)
+
+  useEffect(() => {
+    if (dummy.current !== null) {
+      dummy.current!.scrollIntoView({ behavior: 'smooth' })
+    }
+  }, [messages])
 
   return (
     <div className='flex flex-col h-full flex-1 pl-64'>
@@ -134,6 +149,8 @@ const Chat = () => {
         {messages.map(({ id, ia, message }) => (
           <Message key={id} ia={ia} message={message} />
         ))}
+
+        <p ref={dummy} />
       </main>
       <ChatForm />
     </div>
