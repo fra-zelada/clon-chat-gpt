@@ -1,3 +1,20 @@
+## Proyecto basado en el ejemplo del canal de midudev
+
+https://www.twitch.tv/videos/1738061046
+https://github.com/midudev/midu-chatgpt-clone
+
+## VARIABLES DE ENTORNO
+
+|NAME|DESCRIPTION|
+|:----|:----|
+|CHAT_API_KEY|CHAT API KEY FROM OPENAI|
+|NEXT_PUBLIC_PROFILE_PIC|USER URL PROFILE PIC|
+
+## Live Demo
+
+https://clon-chat-knezu931d-panchozelada.vercel.app/
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
@@ -37,16 +54,4 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
-
-## Proyecto basado en el ejemplo del canal de midudev
-
-https://www.twitch.tv/videos/1738061046
-https://github.com/midudev/midu-chatgpt-clone
-
-## VARIABLES DE ENTORNO
-
-|NAME|DESCRIPTION|
-|:----|:----|
-|CHAT_API_KEY|CHAT API KEY FROM OPENAI|
-|NEXT_PUBLIC_PROFILE_PIC|USER URL PROFILE PIC|
 
